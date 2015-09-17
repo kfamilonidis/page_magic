@@ -10,9 +10,11 @@ require 'page_magic/drivers'
 
 module PageMagic
   class UnspportedBrowserException < Exception;end
+  class ConfigurationException  < Exception;end
 
   class << self
-
+    attr_accessor :default_host
+    
     def drivers
       @drivers ||= Drivers.new.tap do |drivers|
         drivers.load
@@ -40,6 +42,15 @@ module PageMagic
           @url
         end
 
+        def path path=nil
+          raise ConfigurationException unless PageMagic.default_host
+          if path
+            @path = path
+            @url = "#{Capybara.default_host}#{path}"
+          end
+          @path
+        end
+
         def inherited clazz
           clazz.element_definitions.merge!(element_definitions)
           PageMagic.pages << clazz
@@ -49,6 +60,15 @@ module PageMagic
 
     def pages
       @pages||=[]
+    end
+
+    def configure(&block)
+      block.call(self)
+      self
+    end
+
+    def default_host=(value)
+      Capybara.default_host = @default_host = value
     end
   end
 end

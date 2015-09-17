@@ -40,5 +40,14 @@ describe PageMagic do
         expect{described_class.session(browser: :invalid)}.to raise_exception described_class::UnspportedBrowserException
       end
     end
+
+    context 'configure follow path declaration' do
+      it 'sets the default host' do
+        described_class.configure do |config|
+          config.default_host = 'http://rock_n_roll.com'
+        end
+        expect(described_class.default_host).to eq('http://rock_n_roll.com')
+      end
+    end
   end
 end

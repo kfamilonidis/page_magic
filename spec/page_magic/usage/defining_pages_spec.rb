@@ -29,8 +29,16 @@ describe 'The Elements of a Page' do
         Capybara.default_driver = :rack_test
         my_page_class.new.browser.mode.should == :rack_test
       end
-    end
+      it "should change capybara's default_host when path has been configured" do
+        PageMagic.default_host = 'http://rock_n_roll.com'
+        Capybara.default_host.should == 'http://rock_n_roll.com'
+      end
 
+      after do
+        PageMagic.default_host = nil
+        Capybara.default_host = 'http://www.example.com'
+      end
+    end
 
     it 'should copy fields on to element' do
       new_page = my_page_class.new

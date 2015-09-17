@@ -13,7 +13,6 @@ describe 'interacting with pages' do
 
   describe 'visit' do
     it 'goes to the class define url' do
-      page.visit
       page.session.current_path.should == '/page1'
     end
   end
